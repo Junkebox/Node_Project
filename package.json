@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Junkebox/Node_Project#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "ejs": "^3.0.1",
     "express": "^4.17.1",
     "helmet": "^3.21.2",

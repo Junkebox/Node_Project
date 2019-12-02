@@ -1,0 +1,56 @@
+
+$(document).ready(function () {
+    // inserting content into table
+    var trElement, tdElement;
+
+    contents.AlbumStudio.forEach(function(item) {
+
+        trElement = $("<tr id='"+item.title+"'>"+"</tr>");
+        tdElement = $("<td></td>").text(item.title);
+        trElement.append(tdElement);
+
+        tdElement = $("<td></td>").text(item.artist);
+        trElement.append(tdElement);
+
+        tdElement = $("<td></td>").text(item.country);
+        trElement.append(tdElement);
+
+        tdElement = $("<td></td>").text(item.label);
+        trElement.append(tdElement);
+
+        tdElement = $("<td></td>").text(item.year);
+        trElement.append(tdElement);
+
+        tdElement = $("<td></td>").html("<a>" +"<img src='img/delete.jpg'></a>"+"<span style='display:inline-block; width: 15px;'></span><a>" +"<img src='img/edit.png'></a>");
+        trElement.append(tdElement);
+
+        $('#cd-list1').append(trElement);
+    });
+    contents.RemixAlbum.forEach(function(item) {
+        trElement = $("<tr></tr>");
+        tdElement = $("<td></td>").text(item.title);
+        trElement.append(tdElement);
+
+        trElement = $("<tr></tr>");
+        tdElement = $("<td></td>").text(item.title);
+        trElement.append(tdElement);
+
+        tdElement = $("<td></td>").text(item.artist);
+        trElement.append(tdElement);
+
+        tdElement = $("<td></td>").text(item.country);
+        trElement.append(tdElement);
+
+        tdElement = $("<td></td>").text(item.label);
+        trElement.append(tdElement);
+
+        tdElement = $("<td></td>").text(item.year);
+        trElement.append(tdElement);
+
+        tdElement = $("<td></td>").html("<a>" +"<img src='img/delete.jpg'></a>"+"<span style='display:inline-block; width: 15px;'></span><a>" +"<img src='img/edit.png'></a>");
+        trElement.append(tdElement);
+
+        $('#cd-list2').append(trElement);
+    });
+    
+});
