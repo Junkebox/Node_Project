@@ -1,0 +1,25 @@
+{
+  "name": "node_project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Junkebox/Node_Project.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Junkebox/Node_Project/issues"
+  },
+  "homepage": "https://github.com/Junkebox/Node_Project#readme",
+  "dependencies": {
+    "ejs": "^3.0.1",
+    "express": "^4.17.1",
+    "helmet": "^3.21.2",
+    "node-modules": "^1.0.1"
+  }
+}
