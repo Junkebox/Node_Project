@@ -47,6 +47,75 @@ app.listen(port, error => {
   console.log('Server running on port ' + port);
 });
 
+var updatepath;
+
+app.get('/update/:id',(req, res) => {
+  const edit_postId = req.params.id;
+  // FIND POST BY ID
+  var content = {title:'',artist:'',country:'',label:'',year:''};
+  var rawdata = fs.readFileSync('CD-Data.json');
+  var student = JSON.parse(rawdata);
+  var urlpath = url.parse(req.url,true).query;
+
+  if(urlpath.studioname == 1){
+    updatepath = urlpath.studioname;
+    student.AlbumStudio.forEach(function(item) {
+      if(item.title == req.params.id) {
+        content.title = item.title;
+        content.artist = item.artist;
+        content.country = item.country;
+        content.label = item.label;
+        content.year = item.year;
+      }
+    }); 
+  }
+  else {
+    updatepath = urlpath.studioname;
+    student.RemixAlbum.forEach(function(item) {
+      if(item.title == req.params.id) {
+        content.title = item.title;
+        content.artist = item.artist;
+        content.country = item.country;
+        content.label = item.label;
+        content.year = item.year;
+      }
+    });
+  }
+  res.render('edit',{ content : content});
+});
+
+app.post('/update/:id', (req, res) => {
+  var rawdata = fs.readFileSync('CD-Data.json');
+  var student = JSON.parse(rawdata);
+
+  if(updatepath == 1){ 
+    student.AlbumStudio.forEach(function(item) {
+      if(item.title == req.params.id){
+        item.title = req.body.title;
+        item.artist = req.body.artist;
+        item.country = req.body.country;
+        item.label = req.body.label;
+        item.year = req.body.year;
+      }
+    });
+  }
+  else {
+    student.RemixAlbum.forEach(function(item) {
+      if(item.title == req.params.id){
+        item.title = req.body.title;
+        item.artist = req.body.artist;
+        item.country = req.body.country;
+        item.label = req.body.label;
+        item.year = req.body.year;
+      }
+    });
+  }
+
+  let data = JSON.stringify(student);
+  fs.writeFileSync('CD-Data.json', data);
+  res.redirect('/');
+});
+
 
 function findAndRemove(array, property, value) {
   array.forEach(function(result, index) {
