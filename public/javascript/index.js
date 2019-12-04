@@ -52,5 +52,13 @@ $(document).ready(function () {
 
         $('#cd-list2').append(trElement);
     });
+    //add attribute to link to recognize which studio you are using
+    $('#album').on('click',function(){
+        $('#addlink').attr("href","/add?studiosname=1");
+    });
+    
+    $('#remixs').on('click',function(){
+        $('#addlink').attr("href","/add?studiosname=2");
+    });
     
 });

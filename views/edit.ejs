@@ -9,6 +9,7 @@
                 <!-- form for edit page -->
                 <form action="" method="POST">
                     <div class="form-group" style="font-weight: bolder;">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                         <h2>Edit CD Info:</h2>
                         <label for="post_title">Title</label>
                         <input type="text" name="title" class="form-control" placeholder="Enter title:"  value="<%= content.title %>" required>

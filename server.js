@@ -1,3 +1,4 @@
+//modules for this app
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -5,10 +6,14 @@ const path = require('path');
 var url = require('url');
 const helmet = require('helmet');
 const fs = require('fs');
+var cookieParser = require('cookie-parser')    //for cookie parsing
+var csrf = require('csurf')    //csrf module
+var csrfProtection = csrf({ cookie: true })
 
 const app = express();
 const port = process.env.PORT || 3000;
-
+app.use(cookieParser());
+// EJS view template engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
@@ -18,7 +23,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(helmet());
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
-
+var updatepath;
+//index route
 app.get('/', (req, res) => {
   var contents;
   fs.readFile('CD-Data.json', (err, data) => {
@@ -27,6 +33,8 @@ app.get('/', (req, res) => {
     res.render('index', {contents: contents});
   });
 });
+
+//delete route
 app.get('/delete/:id', (req, res) => {
   var rawdata = fs.readFileSync('CD-Data.json');
   var student = JSON.parse(rawdata);
@@ -42,16 +50,9 @@ app.get('/delete/:id', (req, res) => {
   res.redirect('/');
 });
 
-app.listen(port, error => {
-  if (error) throw error;
-  console.log('Server running on port ' + port);
-});
-
-var updatepath;
-
-app.get('/update/:id',(req, res) => {
+//update route
+app.get('/update/:id', csrfProtection,(req, res) => {
   const edit_postId = req.params.id;
-  // FIND POST BY ID
   var content = {title:'',artist:'',country:'',label:'',year:''};
   var rawdata = fs.readFileSync('CD-Data.json');
   var student = JSON.parse(rawdata);
@@ -81,10 +82,11 @@ app.get('/update/:id',(req, res) => {
       }
     });
   }
-  res.render('edit',{ content : content});
+  res.render('edit',{ csrfToken: req.csrfToken(),content : content});
 });
 
-app.post('/update/:id', (req, res) => {
+
+app.post('/update/:id', csrfProtection, (req, res) => {
   var rawdata = fs.readFileSync('CD-Data.json');
   var student = JSON.parse(rawdata);
 
@@ -116,6 +118,41 @@ app.post('/update/:id', (req, res) => {
   res.redirect('/');
 });
 
+var addpath ;
+//create route
+app.get('/add', csrfProtection,(req, res) => {
+  var datateam = url.parse(req.url,true).query;
+  addpath = datateam.studiosname;
+  res.render('add',{ csrfToken: req.csrfToken() });
+});
+
+app.post('/add', csrfProtection,(req, res) => {
+  var addcontent = {title:'',artist:'',country:'',label:'',year:''};
+
+  addcontent.title = req.body.title;
+  addcontent.artist = req.body.artist;
+  addcontent.country = req.body.country;
+  addcontent.label = req.body.label;
+  addcontent.year = req.body.year;
+
+  var rawdata = fs.readFileSync('CD-Data.json');
+  var student = JSON.parse(rawdata);
+
+  if(addpath == '1')
+    student.AlbumStudio.unshift(addcontent);
+  else 
+    student.RemixAlbum.unshift(addcontent);
+
+  let data = JSON.stringify(student);
+  fs.writeFileSync('CD-Data.json', data);
+  res.redirect('/');
+});
+
+//server
+app.listen(port, error => {
+  if (error) throw error;
+  console.log('Server running on port ' + port);
+});
 
 function findAndRemove(array, property, value) {
   array.forEach(function(result, index) {
